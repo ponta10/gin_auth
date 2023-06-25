@@ -25,3 +25,11 @@ func (user *User) HashPassword() error {
 func (user *User) CheckPassword(password string) error {
     return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
+
+func CreateUser(db *gorm.DB, user *User) error {
+    return db.Create(user).Error
+}
+
+func FindUserByUsername(db *gorm.DB, user *User) error {
+    return db.Where("username = ?", user.Username).First(user).Error
+}
