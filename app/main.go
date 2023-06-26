@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+    // DBの接続
 	dsn := "user=gorm password=gorm dbname=gorm host=db port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -23,6 +24,8 @@ func main() {
 	fmt.Println("Connection Opened to Database")
 
 
+    // migration
+    // idを変えれば再度実行できる
 	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
 			ID: "20230601",
@@ -48,6 +51,8 @@ func main() {
 		fmt.Printf("Could not migrate: %v", err)
 	}
 
+    // ルーティング設定
+    // Ginのデフォルトのルータを初期化しています。
 	r := gin.Default()
 
 	r.POST("/register", func(c *gin.Context) { controllers.RegisterEndpoint(c, db) })
