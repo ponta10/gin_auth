@@ -3,9 +3,9 @@ package main
 
 import (
 	"fmt"
-	"gin_auth/app/controllers"
-	"gin_auth/app/middlewares"
-	"gin_auth/app/models"
+	"gin_auth/controllers"
+	"gin_auth/middlewares"
+	"gin_auth/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"

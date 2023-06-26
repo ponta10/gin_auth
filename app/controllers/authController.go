@@ -2,9 +2,11 @@
 package controllers
 
 import (
-    "net/http"
-    "github.com/gin-gonic/gin"
-    "gin_auth/app/models"
+	"fmt"
+	"gin_auth/models"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -30,10 +32,16 @@ func RegisterEndpoint(c *gin.Context, db *gorm.DB) {
 
 func LoginEndpoint(c *gin.Context, db *gorm.DB) {
     var user, foundUser models.User
+    fmt.Println(user, foundUser)
     if err := c.ShouldBindJSON(&user); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+
+    // user の値を foundUser にコピー
+    foundUser = user
+
+    fmt.Println(user, foundUser)
 
     if err := models.FindUserByUsername(db, &foundUser); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Error finding user"})
@@ -53,3 +61,4 @@ func LoginEndpoint(c *gin.Context, db *gorm.DB) {
 
     c.JSON(http.StatusOK, gin.H{"token": token})
 }
+

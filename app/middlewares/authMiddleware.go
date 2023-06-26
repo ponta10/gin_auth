@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"github.com/dgrijalva/jwt-go"
-	"gin_auth/app/models"
+	"gin_auth/models"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

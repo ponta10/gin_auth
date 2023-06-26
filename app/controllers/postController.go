@@ -4,7 +4,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"gin_auth/app/models"
+	"gin_auth/models"
 	"net/http"
 )
 
