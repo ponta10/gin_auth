@@ -49,6 +49,7 @@ func (user *User) GenerateToken() (string, error) {
 
     claims := &Claims{
         Username: user.Username,
+        UserID:   user.ID,
         StandardClaims: jwt.StandardClaims{
             ExpiresAt: expirationTime.Unix(),
         },
