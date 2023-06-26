@@ -3,7 +3,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"gin_auth/app/models"
 	"net/http"
 )

@@ -2,28 +2,33 @@
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-    "github.com/jinzhu/gorm"
-    "gin_auth/app/controllers"
-    "gin_auth/app/models"
-    "gin_auth/app/middlewares"
+	"fmt"
+	"gin_auth/app/controllers"
+	"gin_auth/app/middlewares"
+	"gin_auth/app/models"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
-    db, err := gorm.Open("postgres", "host=localhost user=gorm dbname=gorm password=gorm sslmode=disable")
-    if err != nil {
-        panic("failed to connect database")
-    }
-    defer db.Close()
+	dsn := "user=gorm password=gorm dbname=gorm host=db port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
 
-    db.AutoMigrate(&models.User{}, &models.Post{})
+	fmt.Println("Connection Opened to Database")
 
-    r := gin.Default()
+	db.AutoMigrate(&models.User{}, &models.Post{})
 
-    r.POST("/register", func(c *gin.Context) { controllers.RegisterEndpoint(c, db) })
-    r.POST("/login", func(c *gin.Context) { controllers.LoginEndpoint(c, db) })
+	r := gin.Default()
 
-    r.POST("/posts", middlewares.AuthMiddleware(), func(c *gin.Context) { controllers.CreatePostEndpoint(c, db) })
+	r.POST("/register", func(c *gin.Context) { controllers.RegisterEndpoint(c, db) })
+	r.POST("/login", func(c *gin.Context) { controllers.LoginEndpoint(c, db) })
+
+	r.POST("/posts", middlewares.AuthMiddleware(), func(c *gin.Context) { controllers.CreatePostEndpoint(c, db) })
     
-    r.Run(":8080")
+	r.Run(":8080")
 }

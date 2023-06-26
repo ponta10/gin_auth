@@ -5,7 +5,7 @@ import (
     "net/http"
     "github.com/gin-gonic/gin"
     "gin_auth/app/models"
-    "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func RegisterEndpoint(c *gin.Context, db *gorm.DB) {

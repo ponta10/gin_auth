@@ -2,7 +2,7 @@
 package models
 
 import (
-    "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
     "golang.org/x/crypto/bcrypt"
     "github.com/dgrijalva/jwt-go"
     "time"
