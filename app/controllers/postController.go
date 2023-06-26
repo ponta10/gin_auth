@@ -29,3 +29,19 @@ func CreatePostEndpoint(c *gin.Context, db *gorm.DB) {
 
     c.JSON(http.StatusOK, gin.H{"status": "Post created successfully"})
 }
+
+func GetUserPosts(c *gin.Context, db *gorm.DB) {
+    userId, exists := c.Get("userId")
+    if !exists {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "User ID not found in context"})
+        return
+    }
+
+    user, err := models.GetUserWithPosts(db, userId.(uint))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error retrieving user posts"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"posts": user.Posts})
+}

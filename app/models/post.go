@@ -15,3 +15,11 @@ type Post struct {
 func CreatePost(db *gorm.DB, post *Post) error {
 	return db.Create(post).Error
 }
+
+func GetUserWithPosts(db *gorm.DB, userID uint) (*User, error) {
+    var user User
+    if err := db.Preload("Posts").First(&user, userID).Error; err != nil {
+        return nil, err
+    }
+    return &user, nil
+}

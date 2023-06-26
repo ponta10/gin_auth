@@ -20,6 +20,7 @@ type User struct {
     gorm.Model
     Username string `json:"username" binding:"required"`
     Password string `json:"password" binding:"required"`
+    Posts []Post `gorm:"foreignKey:UserID"`
 }
 
 func (user *User) HashPassword() error {

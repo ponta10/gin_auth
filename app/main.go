@@ -29,6 +29,7 @@ func main() {
 	r.POST("/login", func(c *gin.Context) { controllers.LoginEndpoint(c, db) })
 
 	r.POST("/posts", middlewares.AuthMiddleware(), func(c *gin.Context) { controllers.CreatePostEndpoint(c, db) })
+    r.GET("/myposts", middlewares.AuthMiddleware(), func(c *gin.Context) { controllers.GetUserPosts(c, db) })
     
 	r.Run(":8080")
 }
