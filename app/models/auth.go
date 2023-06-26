@@ -12,6 +12,7 @@ var JwtKey = []byte("your_secret_key")
 
 type Claims struct {
     Username string `json:"username"`
+    UserID   uint   `json:"user_id"`
     jwt.StandardClaims
 }
 
