@@ -6,6 +6,7 @@ import (
     "github.com/jinzhu/gorm"
     "gin_auth/app/controllers"
     "gin_auth/app/models"
+    "gin_auth/app/middlewares"
 )
 
 func main() {
@@ -22,6 +23,7 @@ func main() {
     r.POST("/register", func(c *gin.Context) { controllers.RegisterEndpoint(c, db) })
     r.POST("/login", func(c *gin.Context) { controllers.LoginEndpoint(c, db) })
 
+    r.POST("/posts", middlewares.AuthMiddleware(), func(c *gin.Context) { controllers.CreatePostEndpoint(c, db) })
+    
     r.Run(":8080")
 }
-

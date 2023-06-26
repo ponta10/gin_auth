@@ -1,4 +1,4 @@
-// ./controllers/userController.go
+// ./app/controllers/userController.go
 package controllers
 
 import (
@@ -45,5 +45,11 @@ func LoginEndpoint(c *gin.Context, db *gorm.DB) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"status": "Logged in successfully"})
+    token, err := foundUser.GenerateToken()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error generating token"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"token": token})
 }

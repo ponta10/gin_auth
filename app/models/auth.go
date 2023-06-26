@@ -1,10 +1,19 @@
-// ./models/user.go
+// ./app/models/user.go
 package models
 
 import (
     "github.com/jinzhu/gorm"
     "golang.org/x/crypto/bcrypt"
+    "github.com/dgrijalva/jwt-go"
+    "time"
 )
+
+var JwtKey = []byte("your_secret_key")
+
+type Claims struct {
+    Username string `json:"username"`
+    jwt.StandardClaims
+}
 
 type User struct {
     gorm.Model
@@ -32,4 +41,18 @@ func CreateUser(db *gorm.DB, user *User) error {
 
 func FindUserByUsername(db *gorm.DB, user *User) error {
     return db.Where("username = ?", user.Username).First(user).Error
+}
+
+func (user *User) GenerateToken() (string, error) {
+    expirationTime := time.Now().Add(5 * time.Minute)
+
+    claims := &Claims{
+        Username: user.Username,
+        StandardClaims: jwt.StandardClaims{
+            ExpiresAt: expirationTime.Unix(),
+        },
+    }
+
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(JwtKey)
 }

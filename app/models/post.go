@@ -1,21 +1,16 @@
+// ./app/models/post.go
 package models
 
 import (
-    "github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 type Post struct {
-    gorm.Model
-    Title   string `json:"title"`
-    Content string `json:"content"`
-    UserID  uint   `json:"user_id"`
-}
-
-func GetAllPosts(db *gorm.DB, posts *[]Post) error {
-    return db.Find(posts).Error
+	gorm.Model
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
 func CreatePost(db *gorm.DB, post *Post) error {
-    return db.Create(post).Error
+	return db.Create(post).Error
 }
-
