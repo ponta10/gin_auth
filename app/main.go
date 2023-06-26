@@ -8,6 +8,7 @@ import (
 	"gin_auth/models"
 
 	"github.com/gin-gonic/gin"
+    gormigrate "github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,7 +22,31 @@ func main() {
 
 	fmt.Println("Connection Opened to Database")
 
-	db.AutoMigrate(&models.User{}, &models.Post{})
+
+	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
+		{
+			ID: "20230601",
+			Migrate: func(tx *gorm.DB) error {
+				err := tx.Migrator().DropTable("users", "posts")
+				if err != nil {
+					return err
+				}
+				err = tx.AutoMigrate(&models.User{}, &models.Post{})
+				if err != nil {
+					return err
+				}
+				// Seed data here if necessary
+				return nil
+			},
+			Rollback: func(tx *gorm.DB) error {
+				return tx.Migrator().DropTable("users", "posts")
+			},
+		},
+	})
+
+	if err := m.Migrate(); err != nil {
+		fmt.Printf("Could not migrate: %v", err)
+	}
 
 	r := gin.Default()
 
